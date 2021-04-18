@@ -1,11 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite   1" />
+  <div class="array-list">
+    <div class="array-list-item">
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import HelloWorld from '@/components/HelloWorld.vue';
+
 </script>
 
 <style>
+  .array-list {
+    height: 100px;
+    
+  }
 </style>
