@@ -10,29 +10,37 @@
 <script setup lang="ts">
 import { onMounted, reactive } from "@vue/runtime-core";
 
-let array = reactive([2, 3, 5, 7, 11, 13]);
+let array = reactive([2, 3, 5]);
 const title = 'HaHa';
 
-function sleep(delay: number = 1000, result?: string) {
+function sleep(delay: number = 1000, result?: number): Promise<number> {
   return new Promise(resolve => {
     setTimeout(()=>{
       console.log(result);
       
-      resolve(result);
+      resolve(result||0);
     }, delay)
   })
 }
 
 onMounted(async () => {
 
-  const insertList = [2, 4, 6, 8, 10];
+  const insertList = [2, 4, 6];
   for (const insertItem of insertList) {
     await sleep();
     array.push(insertItem);
   }
 
-  const result: unknown = await Promise.race([sleep(1000, '1'), sleep(5000, '2'), sleep(500, '3')]);
+  const result: unknown = await Promise.race([sleep(1000, 1), sleep(5000, 2), sleep(500, 3)]);
   array.push(Number(result as string));
+
+  let lazyList: number[] = [];
+  [...lazyList] = await Promise.all([sleep(1000, 4), sleep(5000, 5), sleep(500, 6)]);
+  // [...lazyList] = await Promise.allSettled([sleep(1000, 4), sleep(5000, 5), sleep(500, 6)]);
+
+  for (const insertItem of lazyList) {
+    array.push(insertItem);
+  }
 })
 
 </script>
