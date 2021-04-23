@@ -7,7 +7,7 @@
 import { onMounted, reactive, ref } from "@vue/runtime-core";
 import { ArrayList } from "../components";
 
-const title = 'HaHa';
+const title = 'ArrayList';
 const arrayList: any = ref(null);
 
 let array = reactive([2, 3, 5]);
