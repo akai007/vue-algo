@@ -9,24 +9,51 @@
 </template>
 
 <script name="ArrayList" setup lang="ts">
-import { defineEmit, defineProps, reactive, useContext } from "@vue/runtime-core";
-import { sleep } from '../_utils';
-
+import { defineEmit, defineProps, reactive, ref, useContext, watchEffect } from "@vue/runtime-core";
+import {sleep} from '@/common/utils';
 
 const props = defineProps({
   modelValue: {
     type: Array,
     default() {
-      return [1, 2, 3]
+      return []
     }
   }
 })
 const emit = defineEmit();
+
 const list = reactive(props.modelValue);
+const inserting = ref(false);
+
+const wE = watchEffect(() => {
+  if (!inserting.value) {
+    console.log('inserted', inserting);
+  }
+})
 
 const insert = async (x: string) => {
+  if ( inserting.value ) {
+    await sleep(0.2);
+    wE();
+    insert(x);
+    return;
+  }
+  inserting.value = true;
   await sleep();
   list.push(x);
+  inserting.value = false;
+}
+
+const push = async (x: string) => {
+  if ( inserting.value ) {
+    await sleep(0.2);
+    insert(x);
+    return;
+  }
+  inserting.value = true;
+  await sleep();
+  list.push(x);
+  inserting.value = false;
 }
 
 useContext().expose({
@@ -52,6 +79,13 @@ useContext().expose({
   margin: 1px;
   background-color: #58b2dc;
   vertical-align: middle;
+
+}
+
+.array-list-item div {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
 }
 </style>
 

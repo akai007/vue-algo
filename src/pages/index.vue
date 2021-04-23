@@ -1,20 +1,22 @@
 <template>
   <div >{{title}}</div>
-  <ArrayList ref="arrayList"  v-model="array"></ArrayList>
+  <ArrayList ref="arrayList" v-model="array"></ArrayList>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, Ref, ref } from "@vue/runtime-core";
+import { onMounted, reactive, ref } from "@vue/runtime-core";
 import { ArrayList } from "../components";
 
 const title = 'HaHa';
-const arrayList: Ref = ref(null);
+const arrayList: any = ref(null);
 
 let array = reactive([2, 3, 5]);
 
 onMounted(() => {
-  const arrayListRef: any  = arrayList.value;
-  console.log(arrayList.value.insert('123'));
+  const arrayListRef  = arrayList.value;
+  arrayList.value.insert(1);
+  arrayList.value.insert(5);
+  console.log();
 })
 
 </script>
