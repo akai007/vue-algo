@@ -31,29 +31,52 @@ const wE = watchEffect(() => {
   }
 })
 
-const insert = async (x: string) => {
+const insert = async (data: number, index: number) => {
   if ( inserting.value ) {
     await sleep(0.2);
-    wE();
-    insert(x);
-    return;
+    insert(data, index);
+  } else {
+    inserting.value = true;
+    await sleep();
+    list.push(data);
+    inserting.value = false;
   }
-  inserting.value = true;
-  await sleep();
-  list.push(x);
-  inserting.value = false;
+}
+
+const remove = async (data: number, index: number) => {
+  if ( inserting.value ) {
+    await sleep(0.2);
+    insert(data, index);
+  } else {
+    inserting.value = true;
+    await sleep();
+    list.push(data);
+    inserting.value = false;
+  }
 }
 
 const push = async (x: string) => {
   if ( inserting.value ) {
     await sleep(0.2);
-    insert(x);
-    return;
+    push(x);
+  } else {
+    inserting.value = true;
+    await sleep();
+    list.push(x);
+    inserting.value = false;
   }
-  inserting.value = true;
-  await sleep();
-  list.push(x);
-  inserting.value = false;
+}
+
+const pop = async (data: number) => {
+  if ( inserting.value ) {
+    await sleep(0.2);
+    pop(data);
+  } else {
+    inserting.value = true;
+    await sleep();
+    list.pop();
+    inserting.value = false;
+  }
 }
 
 useContext().expose({
