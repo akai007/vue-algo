@@ -8,9 +8,11 @@
   </div>
 </template>
 
+<script lang="ts">
+</script>
 <script name="ArrayList" setup lang="ts">
 import { defineEmit, defineProps, reactive, ref, useContext, watchEffect } from "@vue/runtime-core";
-import {sleep} from '@/common/utils';
+import {sleep, stepInterval} from '@/common/utils';
 
 const props = defineProps({
   modelValue: {
@@ -18,69 +20,67 @@ const props = defineProps({
     default() {
       return []
     }
+  },
+  actionDelay: {
+    type: Number,
+    default: 1
   }
 })
 const emit = defineEmit();
 
-const list = reactive(props.modelValue);
-const inserting = ref(false);
+const list = reactive(props.modelValue || []);
 
-const wE = watchEffect(() => {
-  if (!inserting.value) {
-    console.log('inserted', inserting);
+const insert = stepInterval((data: number) => {
+   list.push(data);
+   emit('insert', data);
+}, props.actionDelay)
+
+const remove = stepInterval((data: number) => {
+   list.push(data);
+}, props.actionDelay)
+
+const push = stepInterval((data: number) => {
+   list.push(data);
+}, props.actionDelay)
+
+const pop = stepInterval(() => {
+   list.pop();
+}, props.actionDelay);
+
+const bubbleSort = stepInterval(async() => {
+  for (let i = 0; i < list.length; i++) {
+    for (let j = 0; j < list.length - i - 1; j++) {
+      if (Number(list[j]) > Number(list[j+1])) {
+        await sleep();
+        let t = list[j];
+        list[j] = list[j+1];
+        list[j+1] = t;
+      }
+    }
   }
-})
+}, props.actionDelay);
 
-const insert = async (data: number, index: number) => {
-  if ( inserting.value ) {
-    await sleep(0.2);
-    insert(data, index);
-  } else {
-    inserting.value = true;
+const insertionSort = stepInterval(async() => {
+  for (let i = 1; i < list.length; i++) {
+    let j = i - 1;
+    let x = Number(list[i]);
     await sleep();
-    list.push(data);
-    inserting.value = false;
+    while (j > -1 && Number(list[j]) > x) {
+      await sleep();
+      list[j+1] = list[j];
+      j--;
+    }
+    list[j+1] = x;
   }
-}
+}, props.actionDelay);
 
-const remove = async (data: number, index: number) => {
-  if ( inserting.value ) {
-    await sleep(0.2);
-    insert(data, index);
-  } else {
-    inserting.value = true;
-    await sleep();
-    list.push(data);
-    inserting.value = false;
-  }
-}
 
-const push = async (x: string) => {
-  if ( inserting.value ) {
-    await sleep(0.2);
-    push(x);
-  } else {
-    inserting.value = true;
-    await sleep();
-    list.push(x);
-    inserting.value = false;
-  }
-}
-
-const pop = async (data: number) => {
-  if ( inserting.value ) {
-    await sleep(0.2);
-    pop(data);
-  } else {
-    inserting.value = true;
-    await sleep();
-    list.pop();
-    inserting.value = false;
-  }
-}
 
 useContext().expose({
-  insert
+  insert,
+  pop,
+  bubbleSort,
+  insertionSort
 })
 </script>
 
@@ -111,25 +111,3 @@ useContext().expose({
   font-weight: 500;
 }
 </style>
-
-<!--
-// onMounted(async () => {
-
-  //   const insertList = [2, 4, 6];
-  //   for (const insertItem of insertList) {
-  //     await sleep();
-  //     array.push(insertItem);
-  //   }
-  
-  //   const result: unknown = await Promise.race([sleep(1000, 1), sleep(5000, 2), sleep(500, 3)]);
-  //   array.push(Number(result as string));
-  
-  //   let lazyList: number[] = [];
-  //   [...lazyList] = await Promise.all([sleep(1000, 4), sleep(5000, 5), sleep(500, 6)]);
-  //   // [...lazyList] = await Promise.allSettled([sleep(1000, 4), sleep(5000, 5), sleep(500, 6)]);
-  
-  //   for (const insertItem of lazyList) {
-  //     array.push(insertItem);
-  //   }
-  // })
-  -->

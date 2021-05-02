@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Index from '@/pages/index.vue';
+import Index from '@/pages/ArrayList/index.vue';
 
 const routes = [
-  { path: '/', component: Index },
+  { name:'index', path: '/', component: Index },
 ]
 
 const router = createRouter({
