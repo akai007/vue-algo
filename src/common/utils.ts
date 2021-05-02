@@ -6,3 +6,18 @@ export function sleep(delay: number = 1): Promise<number> {
     }, delay * 1000)
   })
 }
+
+let doing = false;
+export const stepInterval = function(f: Function, delay: number = 1) {
+  return async function inner(data: any) {
+    if ( doing ) {
+      await sleep(0.2);
+      inner(data);
+    } else {
+      doing = true;
+      await sleep(delay);
+      f(data);
+      doing = false;
+    }
+  }
+}
