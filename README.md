@@ -1,2 +1,0 @@
-# vue-algo
-vue algorithm
