@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "@vue/runtime-core";
 import { ArrayList } from "@/components";
+import {shuffle} from 'lodash/index';
 
 const title = 'ArrayList';
 const arrayList = ref(null);
@@ -19,7 +20,8 @@ onMounted(() => {
   arrayListRef.insert(1);
   arrayListRef.pop();
 
-  arrayListRef.bubbleSort();
+  arrayListRef.selectionSort();
+
   // array = [11, 7, 5, 3];
   // arrayListRef.insertionSort();
 

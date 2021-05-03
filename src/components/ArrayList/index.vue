@@ -1,10 +1,10 @@
 <template>
   <div class="va-array-list">
-    <div class="array-list">
-      <div class="array-list-item" v-for="(item, index) in list" :key="index">
-        <div>{{item}}</div>
-      </div>
-    </div>
+      <transition-group name="list" tag="div" class="array-list">
+        <div class="array-list-item" v-for="item in list" :key="item">
+          <div>{{item}}</div>
+        </div>
+      </transition-group>
   </div>
 </template>
 
@@ -74,13 +74,29 @@ const insertionSort = stepInterval(async() => {
   }
 }, props.actionDelay);
 
+const selectionSort = stepInterval(async() => {
+  for (let i = 0; i < list.length; i++) {
+    let j, k;
+    for (j = k = i; j < list.length; j++) {
+      if ( Number(list[j]) < Number(list[k]) ) {
+        k = j;
+      }
+    }
+    await sleep();
+    let t = list[i];
+    list[i] = list[k];
+    list[k] = t;
+  }
+}, props.actionDelay);
+
 
 
 useContext().expose({
   insert,
   pop,
   bubbleSort,
-  insertionSort
+  insertionSort,
+  selectionSort
 })
 </script>
 
@@ -95,13 +111,13 @@ useContext().expose({
 }
 
 .array-list-item {
+  display: inline-block;
   width: 60px;
-
   height: 60px;
   line-height: 60px;
   margin: 1px;
   background-color: #58b2dc;
-  vertical-align: middle;
+  transition: all 0.8s ease;
 
 }
 
@@ -110,4 +126,20 @@ useContext().expose({
   font-size: 24px;
   font-weight: 500;
 }
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.8s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-move {
+  background-color: #999;
+}
+
 </style>
