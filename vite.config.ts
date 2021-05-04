@@ -8,5 +8,13 @@ export default defineConfig({
     alias: [
       { find: '@', replacement: '/src' }
     ]
-  }
+  },
+// TODO
+  // css: {
+  //   preprocessorOptions: {
+  //     sass: {
+  //       additionalData: '@import "@/styles/main.scss"'
+  //     }
+  //   }
+  // }
 })
