@@ -75,20 +75,57 @@ const insertionSort = stepInterval(async() => {
 }, props.actionDelay);
 
 const selectionSort = stepInterval(async() => {
-  for (let i = 0; i < list.length; i++) {
-    let j, k;
+  let i, j, k, t;
+  for (i = 0; i < list.length; i++) {
     for (j = k = i; j < list.length; j++) {
       if ( Number(list[j]) < Number(list[k]) ) {
         k = j;
       }
     }
     await sleep();
-    let t = list[i];
+    t = list[i];
     list[i] = list[k];
     list[k] = t;
   }
 }, props.actionDelay);
 
+
+async function partition(l: number, h: number) {
+  let i = l;
+  let j = h;
+  let pirot = list[l];
+
+  console.log('partition', l, h);
+
+  let t;
+  do {
+    do { i++; } while (Number(list[i]) <= Number(pirot));
+    do { j--; } while (Number(list[j]) > Number(pirot));
+    if (i < j) {
+      t = list[i];
+      list[i] = list[j];
+      list[j] = t;
+      await sleep();
+    }
+  } while (i < j);
+
+  t = list[l];
+  list[l] = list[j];
+  list[j] = t;
+  await sleep();
+
+  return j;
+}
+
+const quickSort = stepInterval(async function quickSort(l: number = 0, h: number = list.length) {
+  console.log('_quickSort', l, h);
+  let j;
+  if (l < h) {
+    j = await partition(l,h);
+    quickSort(l, j);
+    quickSort(j+1, h);
+  }
+}, props.actionDelay);
 
 
 useContext().expose({
@@ -96,7 +133,8 @@ useContext().expose({
   pop,
   bubbleSort,
   insertionSort,
-  selectionSort
+  selectionSort,
+  quickSort
 })
 </script>
 
