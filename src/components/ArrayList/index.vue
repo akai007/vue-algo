@@ -138,7 +138,9 @@ useContext().expose({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/styles/main.scss';
+
 .va-array-list {
 }
 
@@ -146,7 +148,15 @@ useContext().expose({
   height: 100px;
   display: flex;
   overflow-x: scroll;
+  padding-top: 40px;
+  @include phone {
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+  }
 }
+
+
 
 .array-list-item {
   display: inline-block;
@@ -178,6 +188,7 @@ useContext().expose({
 
 .list-move {
   background-color: #999;
-}
 
+  transform: translateY(-30px);
+}
 </style>

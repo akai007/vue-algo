@@ -22,7 +22,7 @@ onMounted(() => {
   // arrayListRef.quickSort();
 
   // array = [11, 7, 5, 3];
-  arrayListRef.insertionSort();
+  arrayListRef.bubbleSort();
 
 })
 
