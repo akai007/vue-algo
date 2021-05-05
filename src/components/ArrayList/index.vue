@@ -124,8 +124,6 @@ async function partition(l: number, h: number) {
   let j = h;
   let pirot = list[l];
 
-  console.log("partition", l, h);
-
   let t;
   do {
     do {
@@ -156,7 +154,6 @@ const quickSort = stepInterval(async function quickSort(
   l: number = 0,
   h: number = list.length
 ) {
-  console.log("_quickSort", l, h);
   let j;
   if (l < h) {
     j = await partition(l, h);
@@ -186,11 +183,13 @@ useContext().expose({
   height: 100px;
   display: flex;
   overflow-x: scroll;
-  padding-top: 40px;
+  padding: 40px 0;
+  justify-content: center;
   @include phone {
     flex-direction: column;
-    height: 100vh;
     align-items: center;
+    height: 100vh;
+    padding: 0 40px;
   }
 }
 
@@ -224,9 +223,15 @@ useContext().expose({
 .list-move.is-active-first {
   background-color: #999;
   transform: translateY(-30px);
+  @include phone {
+    transform: translateX(-30px);
+  }
 }
 .list-move.is-active-second {
   background-color: #999;
   transform: translateY(30px);
+  @include phone {
+    transform: translateX(30px);
+  }
 }
 </style>
