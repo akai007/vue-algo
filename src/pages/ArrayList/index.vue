@@ -19,10 +19,10 @@ onMounted(() => {
   arrayListRef.insert(1);
   arrayListRef.pop();
 
-  // arrayListRef.quickSort();
+  arrayListRef.quickSort();
 
   // array = [11, 7, 5, 3];
-  arrayListRef.bubbleSort();
+  // arrayListRef.bubbleSort();
 
 })
 
