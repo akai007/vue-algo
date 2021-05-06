@@ -1,5 +1,4 @@
 <template>
-  <div >{{title}}</div>
   <ArrayList ref="arrayList" v-model="array" ></ArrayList>
 </template>
 

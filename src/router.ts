@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Index from '@/pages/ArrayList/index.vue';
 
 const routes = [
-  { name:'index', path: '/', component: Index },
+  { name:'index', path: '/', component: Index, meta: {title: 'ArrayList'} },
 ]
 
 const router = createRouter({
