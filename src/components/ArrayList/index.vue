@@ -43,9 +43,9 @@ const props = defineProps({
 });
 const emit = defineEmit();
 
-const list = reactive(props.modelValue || []);
+const list = reactive(props.modelValue as number[]);
 
-let actives = reactive([-1]);
+let actives = reactive([] as number[]);
 
 const addActives = function (...items: any[]) {
   actives.push(...items);
@@ -79,7 +79,7 @@ const pop = stepInterval(() => {
 const bubbleSort = stepInterval(async () => {
   for (let i = 0; i < list.length; i++) {
     for (let j = 0; j < list.length - i - 1; j++) {
-      if (Number(list[j]) > Number(list[j + 1])) {
+      if (list[j] > list[j + 1]) {
         await sleep();
         addActives(list[j], list[j + 1]);
         let t = list[j];
@@ -93,9 +93,9 @@ const bubbleSort = stepInterval(async () => {
 const insertionSort = stepInterval(async () => {
   for (let i = 1; i < list.length; i++) {
     let j = i - 1;
-    let x = Number(list[i]);
+    let x = list[i];
     await sleep();
-    while (j > -1 && Number(list[j]) > x) {
+    while (j > -1 && list[j] > x) {
       await sleep();
       list[j + 1] = list[j];
       j--;
@@ -108,7 +108,7 @@ const selectionSort = stepInterval(async () => {
   let i, j, k, t;
   for (i = 0; i < list.length; i++) {
     for (j = k = i; j < list.length; j++) {
-      if (Number(list[j]) < Number(list[k])) {
+      if (list[j] < list[k]) {
         k = j;
       }
     }
@@ -128,23 +128,23 @@ async function partition(l: number, h: number) {
   do {
     do {
       i++;
-    } while (Number(list[i]) <= Number(pirot));
+    } while (list[i] <= pirot);
     do {
       j--;
-    } while (Number(list[j]) > Number(pirot));
+    } while (list[j] > pirot);
     if (i < j) {
+      addActives(list[i], list[j]);
       t = list[i];
       list[i] = list[j];
       list[j] = t;
-      addActives(list[j], list[j + 1]);
       await sleep();
     }
   } while (i < j);
 
+  addActives(list[l], list[j]);
   t = list[l];
   list[l] = list[j];
   list[j] = t;
-  addActives(list[j], list[j + 1]);
   await sleep();
 
   return j;
@@ -157,11 +157,18 @@ const quickSort = stepInterval(async function quickSort(
   let j;
   if (l < h) {
     j = await partition(l, h);
-    quickSort(l, j);
-    quickSort(j + 1, h);
+    await quickSort(l, j);
+    await quickSort(j + 1, h);
   }
 },
 props.actionDelay);
+
+const mergeSort = stepInterval(async function mergeSort() {
+
+},
+props.actionDelay);
+
+
 
 useContext().expose({
   insert,
@@ -211,7 +218,7 @@ useContext().expose({
 
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.8s ease;
+  transition: all 0.8s ease-in-out;
 }
 
 .list-enter-from,

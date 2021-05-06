@@ -15,9 +15,9 @@ let array = reactive([11,13,7,12,16,9,24,5,10,3]);
 onMounted(() => {
   const arrayListRef = arrayList.value as ArrayList;
   
-  arrayListRef.insert(2);
-  arrayListRef.insert(1);
-  arrayListRef.pop();
+  // arrayListRef.insert(2);
+  // arrayListRef.insert(1);
+  // arrayListRef.pop();
 
   // arrayListRef.quickSort();
 
