@@ -7,8 +7,8 @@
         :key="item"
         class="array-list-item"
         :class="{
-          'is-active-first': actives[0]==item,
-          'is-active-second': actives[1]==item,
+          'is-active-first': actives[0] == item,
+          'is-active-second': actives[1] == item,
         }"
       >
         <div>{{ item }}</div>
@@ -17,17 +17,10 @@
   </div>
 </template>
 
-<script lang="ts">
-</script>
+<script lang="ts"></script>
 <script name="ArrayList" setup lang="ts">
-import {
-  defineEmit,
-  defineProps,
-  reactive,
-  ref,
-  useContext,
-} from "@vue/runtime-core";
-import { sleep, stepInterval } from "@/common/utils";
+import { defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
+import { sleep, stepInterval } from '@/common/utils';
 
 const props = defineProps({
   modelValue: {
@@ -61,7 +54,7 @@ const clearActives = function () {
 
 const insert = stepInterval((data: number) => {
   list.push(data);
-  emit("insert", data);
+  emit('insert', data);
 }, props.actionDelay);
 
 const remove = stepInterval((data: number) => {
@@ -76,19 +69,29 @@ const pop = stepInterval(() => {
   list.pop();
 }, props.actionDelay);
 
+const update = async (index: number, x: number) => {
+  await sleep();
+  addActives(list[index]);
+  list[index] = x;
+};
+
+const swap = async (x: number, y: number) => {
+  await sleep();
+  addActives(list[x], list[y]);
+  let t = list[x];
+  list[x] = list[y];
+  list[y] = t;
+};
+
 const bubbleSort = async () => {
   for (let i = 0; i < list.length; i++) {
     for (let j = 0; j < list.length - i - 1; j++) {
       if (list[j] > list[j + 1]) {
-        await sleep();
-        addActives(list[j], list[j + 1]);
-        let t = list[j];
-        list[j] = list[j + 1];
-        list[j + 1] = t;
+        await swap(j, j + 1);
       }
     }
   }
-}
+};
 
 const insertionSort = async () => {
   for (let i = 1; i < list.length; i++) {
@@ -112,12 +115,8 @@ const selectionSort = async () => {
         k = j;
       }
     }
-    await sleep();
-    t = list[i];
-    list[i] = list[k];
-    list[k] = t;
+    await swap(i, k);
   }
-  // return Promise.resolve();
 };
 
 async function partition(l: number, h: number) {
@@ -134,39 +133,24 @@ async function partition(l: number, h: number) {
       j--;
     } while (list[j] > pirot);
     if (i < j) {
-      addActives(list[i], list[j]);
-      t = list[i];
-      list[i] = list[j];
-      list[j] = t;
-      await sleep();
+      await swap(i, j);
     }
   } while (i < j);
-
-  addActives(list[l], list[j]);
-  t = list[l];
-  list[l] = list[j];
-  list[j] = t;
-  await sleep();
+  await swap(l, j);
 
   return j;
 }
 
-const quickSort = async function quickSort(
-  l: number = 0,
-  h: number = list.length
-) {
+const quickSort = async function quickSort(l: number = 0, h: number = list.length) {
   let j;
   if (l < h) {
     j = await partition(l, h);
     await quickSort(l, j);
     await quickSort(j + 1, h);
   }
-}
-
-const mergeSort = async function mergeSort() {
-
 };
 
+const mergeSort = async function mergeSort() {};
 
 useContext().expose({
   insert,
@@ -179,7 +163,7 @@ useContext().expose({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/main.scss";
+@import '@/styles/main.scss';
 
 .va-array-list {
 }
