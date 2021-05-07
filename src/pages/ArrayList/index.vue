@@ -6,7 +6,7 @@
 import { onMounted, reactive, ref } from '@vue/runtime-core';
 import { ArrayList } from '@/components';
 
-const arrayList = ref({});
+const arrayList = ref<ArrayList>({});
 
 let array = reactive([11, 13, 7, 12, 16, 9, 24, 5, 10, 3]);
 

@@ -1,17 +1,6 @@
 <template>
   {{ actives }}
   <div class="va-array-list">
-    <div class="cursors-list">
-      <div
-        v-for="(item, index) in cursors"
-        :key="item"
-        class="cursor-item"
-        :class="`cursor-item-${index}`"
-        :style="cursorItemStyle"
-      >
-        {{ item }}
-      </div>
-    </div>
     <transition-group name="list" tag="div" class="array-list">
       <div
         v-for="item in list"
@@ -21,6 +10,17 @@
         :ref="(el) => itemRefs.push(el)"
       >
         <div>{{ item }}</div>
+      </div>
+      <div class="cursors-list" :key="'cursors'">
+        <div
+          v-for="(item, index) in cursors"
+          :key="item"
+          class="cursor-item"
+          :class="`cursor-item-${index}`"
+          :style="cursorItemStyle[index]"
+        >
+          {{ item }}
+        </div>
       </div>
     </transition-group>
   </div>
@@ -45,15 +45,23 @@ const props = defineProps({
 });
 const emit = defineEmit();
 
-const list = reactive(props.modelValue as number[]);
+const list = reactive<number[]>(props.modelValue as number[]);
 const itemRefs: any[] = [];
 
-let cursors = reactive([] as number[]);
-let actives = reactive([] as number[]);
+let cursors = reactive<number[]>([]);
+let actives = reactive<number[]>([]);
 
-const cursorItemStyle = computed(function (index: number) {
-  let rect = itemRefs[index].getBoundingClientRect();
-  return { top: rect.top };
+const cursorItemStyle = computed(() => {
+  let cursorsItemRef = cursors.map(index => itemRefs[index]);
+  let listTop = itemRefs[0].getBoundingClientRect().top
+  let itemMargin = itemRefs[0];
+  console.log('margin',itemRefs[0].style);
+  
+  return cursors.map((index, i) => {
+    return {
+      top: `${((itemRefs[index].offsetHeight+2) * index) + listTop + ( 15 * i)}px`
+    }
+  });
 });
 
 const addActives = function (...items: any[]) {
@@ -102,8 +110,10 @@ const swap = async (x: number, y: number) => {
 const bubbleSort = async () => {
   for (let i = 0; i < list.length; i++) {
     cursors[0] = i;
+    await sleep(1);
     for (let j = 0; j < list.length - i - 1; j++) {
       cursors[1] = j;
+      await sleep(1);
       if (list[j] > list[j + 1]) {
         await swap(j, j + 1);
       }
@@ -184,7 +194,7 @@ useContext().expose({
 @import '@/styles/main.scss';
 
 .va-array-list {
-  position: relative;
+  position: flex;
 }
 
 .array-list {
@@ -192,7 +202,6 @@ useContext().expose({
   display: flex;
   overflow-x: scroll;
   padding: 40px 0;
-  justify-content: center;
   @include phone {
     flex-direction: column;
     align-items: center;
@@ -220,11 +229,11 @@ useContext().expose({
   }
 }
 .cursors-list {
-  width: 0px;
-  position: absolute;
+  // position: absolute;
 }
 .cursor-item {
   display: inline-block;
+  position: absolute;
   height: 0;
   border: 10px solid;
   border-color: transparent blue transparent transparent;
