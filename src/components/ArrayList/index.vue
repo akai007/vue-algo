@@ -1,15 +1,24 @@
 <template>
+  {{ actives }}
   <div class="va-array-list">
-    {{ actives }}
+    <div class="cursors-list">
+      <div
+        v-for="(item, index) in cursors"
+        :key="item"
+        class="cursor-item"
+        :class="`cursor-item-${index}`"
+        :style="cursorItemStyle"
+      >
+        {{ item }}
+      </div>
+    </div>
     <transition-group name="list" tag="div" class="array-list">
       <div
         v-for="item in list"
         :key="item"
         class="array-list-item"
-        :class="{
-          'is-active-first': actives[0] == item,
-          'is-active-second': actives[1] == item,
-        }"
+        :class="[actives[0] == item ? 'is-active-first' : '', actives[1] == item ? 'is-active-second' : '']"
+        :ref="(el) => itemRefs.push(el)"
       >
         <div>{{ item }}</div>
       </div>
@@ -19,7 +28,7 @@
 
 <script lang="ts"></script>
 <script name="ArrayList" setup lang="ts">
-import { defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
+import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
 import { sleep, stepInterval } from '@/common/utils';
 
 const props = defineProps({
@@ -37,8 +46,15 @@ const props = defineProps({
 const emit = defineEmit();
 
 const list = reactive(props.modelValue as number[]);
+const itemRefs: any[] = [];
 
+let cursors = reactive([] as number[]);
 let actives = reactive([] as number[]);
+
+const cursorItemStyle = computed(function (index: number) {
+  let rect = itemRefs[index].getBoundingClientRect();
+  return { top: rect.top };
+});
 
 const addActives = function (...items: any[]) {
   actives.push(...items);
@@ -85,7 +101,9 @@ const swap = async (x: number, y: number) => {
 
 const bubbleSort = async () => {
   for (let i = 0; i < list.length; i++) {
+    cursors[0] = i;
     for (let j = 0; j < list.length - i - 1; j++) {
+      cursors[1] = j;
       if (list[j] > list[j + 1]) {
         await swap(j, j + 1);
       }
@@ -166,6 +184,7 @@ useContext().expose({
 @import '@/styles/main.scss';
 
 .va-array-list {
+  position: relative;
 }
 
 .array-list {
@@ -192,12 +211,24 @@ useContext().expose({
   transition: all 0.8s ease;
 }
 
-.array-list-item div {
-  color: #fff;
-  font-size: 24px;
-  font-weight: 500;
+.array-list-item {
+  position: relative;
+  div {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 500;
+  }
 }
-
+.cursors-list {
+  width: 0px;
+  position: absolute;
+}
+.cursor-item {
+  display: inline-block;
+  height: 0;
+  border: 10px solid;
+  border-color: transparent blue transparent transparent;
+}
 .list-enter-active,
 .list-leave-active {
   transition: all 0.8s ease-in-out;
