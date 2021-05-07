@@ -76,7 +76,7 @@ const pop = stepInterval(() => {
   list.pop();
 }, props.actionDelay);
 
-const bubbleSort = stepInterval(async () => {
+const bubbleSort = async () => {
   for (let i = 0; i < list.length; i++) {
     for (let j = 0; j < list.length - i - 1; j++) {
       if (list[j] > list[j + 1]) {
@@ -88,9 +88,9 @@ const bubbleSort = stepInterval(async () => {
       }
     }
   }
-}, props.actionDelay);
+}
 
-const insertionSort = stepInterval(async () => {
+const insertionSort = async () => {
   for (let i = 1; i < list.length; i++) {
     let j = i - 1;
     let x = list[i];
@@ -102,9 +102,9 @@ const insertionSort = stepInterval(async () => {
     }
     list[j + 1] = x;
   }
-}, props.actionDelay);
+};
 
-const selectionSort = stepInterval(async () => {
+const selectionSort = async () => {
   let i, j, k, t;
   for (i = 0; i < list.length; i++) {
     for (j = k = i; j < list.length; j++) {
@@ -117,7 +117,8 @@ const selectionSort = stepInterval(async () => {
     list[i] = list[k];
     list[k] = t;
   }
-}, props.actionDelay);
+  // return Promise.resolve();
+};
 
 async function partition(l: number, h: number) {
   let i = l;
@@ -150,7 +151,7 @@ async function partition(l: number, h: number) {
   return j;
 }
 
-const quickSort = stepInterval(async function quickSort(
+const quickSort = async function quickSort(
   l: number = 0,
   h: number = list.length
 ) {
@@ -160,14 +161,11 @@ const quickSort = stepInterval(async function quickSort(
     await quickSort(l, j);
     await quickSort(j + 1, h);
   }
-},
-props.actionDelay);
+}
 
-const mergeSort = stepInterval(async function mergeSort() {
+const mergeSort = async function mergeSort() {
 
-},
-props.actionDelay);
-
+};
 
 
 useContext().expose({

@@ -6,12 +6,11 @@
 import { onMounted, reactive, ref } from "@vue/runtime-core";
 import { ArrayList } from "@/components";
 
-const title = 'ArrayList';
 const arrayList = ref(null);
 
 let array = reactive([11,13,7,12,16,9,24,5,10,3]);
 
-onMounted(() => {
+onMounted(async() => {
   const arrayListRef = arrayList.value as ArrayList;
   
   // arrayListRef.insert(2);
@@ -20,8 +19,11 @@ onMounted(() => {
 
   // arrayListRef.quickSort();
 
-  // array = [11, 7, 5, 3];
-  arrayListRef.bubbleSort();
+  await arrayListRef.selectionSort();
+  console.log('done');
+  
+  await arrayListRef.quickSort();
+  console.log('done');
 
 })
 
