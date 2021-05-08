@@ -10,7 +10,7 @@
         :class="`cursor-item-${index + 1}`"
         :style="cursorItemStyle[index]"
       >
-        {{ CURSOR_FLAGS[index] }}
+        <div class="cursor-item-text">{{ CURSOR_FLAGS[index] }}</div>
       </div>
     </transition-group>
   </div>
@@ -39,20 +39,31 @@ const emit = defineEmit();
 
 const CURSOR_FLAGS = ['i', 'j', 'k'];
 
-// const itemRefs = new Map<number, HTMLDivElement | any>();
-
 const cursors = reactive<number[]>(props.modelValue as number[]);
 let actives = reactive<number[]>([]);
 
 const cursorItemStyle = computed(() => {
+  let points = new Set();
+
   return cursors.map((index, i) => {
     let styles: any = {};
+    let point;
     if (isPhone()) {
-      styles['top'] = `${(props.itemRefs as any).get(index).offsetTop}px`;
+      point = (props.itemRefs as any).get(index).offsetTop;
+      if (points.has(point)) {
+        point = point + 20;
+      } else {
+        points.add(point);
+      }
+      styles['top'] = `${point}px`;
     } else {
-      console.log(props.itemRefs.get(index));
-
-      styles['left'] = `${(props.itemRefs as any).get(index).offsetLeft}px`;
+      point = (props.itemRefs as any).get(index).offsetLeft;
+      if (points.has(point)) {
+        point = point + 20;
+      } else {
+        points.add(point);
+      }
+      styles['left'] = `${point}px`;
     }
     return styles;
   });
@@ -90,21 +101,45 @@ $cursor_colors: #e16b8c, #fb966e;
 }
 .cursor-item {
   position: absolute;
-  display: inline-block;
-  height: 0;
-  width: 0;
-  border: 10px solid;
-  line-height: 40px;
-  text-align: center;
-  transform: scaleX(0.5);
+  display: flex;
+  align-items: center;
   transition: all 0.5s ease;
+
+  flex-direction: column;
+  @include phone {
+    flex-direction: row;
+  }
+
+  &-text {
+    margin: 4px 0 0 0;
+    @include phone {
+      margin: 0 0 0 4px;
+    }
+  }
+
+  &::before {
+    content: '';
+    display: inline-block;
+    height: 0;
+    width: 0;
+    border: 10px solid;
+    text-align: center;
+
+    transform: scaleX(0.5);
+    @include phone {
+      transform: scaleY(0.5);
+    }
+  }
 }
 @each $cursor_color in $cursor_colors {
   $i: index($cursor_colors, $cursor_color);
   .cursor-item-#{$i} {
-    border-color: transparent transparent nth($cursor_colors, $i) transparent;
-    @include phone {
-      border-color: transparent nth($cursor_colors, $i) transparent transparent;
+    color: nth($cursor_colors, $i);
+    &::before {
+      border-color: transparent transparent nth($cursor_colors, $i) transparent;
+      @include phone {
+        border-color: transparent nth($cursor_colors, $i) transparent transparent;
+      }
     }
   }
 }
