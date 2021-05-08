@@ -3,7 +3,7 @@ export function sleep(delay: number = 1): Promise<number> {
   return new Promise(resolve => {
     setTimeout(()=>{
       resolve(delay);
-    }, delay * 200)
+    }, delay * 1000)
   })
 }
 
@@ -21,7 +21,6 @@ export const stepInterval = function(f: Function, delay: number = 1) {
     }
   }
 }
-
 
 export function isPhone() {
 	let result = window.matchMedia('(max-width: 768px)');

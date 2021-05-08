@@ -18,7 +18,7 @@ onMounted(async () => {
   // arrayListRef.pop();
 
   // arrayListRef.quickSort();
-
+  console.log(arrayListRef.bubbleSort);
   await arrayListRef.bubbleSort();
   console.log('done');
 

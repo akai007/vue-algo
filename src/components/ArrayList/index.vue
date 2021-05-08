@@ -1,33 +1,27 @@
 <template>
   {{ actives }}
   <div class="va-array-list">
-    <transition-group name="list" tag="div" class="array-list">
-      <div
-        v-for="(item, index) in list"
-        :key="item"
-        class="array-list-item"
-        :class="[actives[0] == item ? 'is-active-first' : '', actives[1] == item ? 'is-active-second' : '']"
-        :ref="(el) => itemRefs.set(index, el)"
-      >
-        <div>{{ item }}</div>
-      </div>
-      <div class="cursors-list" :key="'cursors'">
+    <Cursors :modelValue="cursors" :itemRefs="itemRefs">
+      <transition-group name="list" tag="div" class="array-list">
         <div
-          v-for="(item, index) in cursors"
+          v-for="(item, index) in list"
           :key="item"
-          class="cursor-item"
-          :class="`cursor-item-${index}`"
-          :style="cursorItemStyle[index]"
+          class="array-list-item"
+          :class="[actives[0] == item ? 'is-active-first' : '', actives[1] == item ? 'is-active-second' : '']"
+          :ref="(el) => itemRefs.set(index, el)"
         >
-          {{ item }}
+          <div>{{ item }}</div>
         </div>
-      </div>
-    </transition-group>
+      </transition-group>
+    </Cursors>
   </div>
 </template>
 
-<script lang="ts"></script>
-<script name="ArrayList" setup lang="ts">
+<script lang="ts">
+export default { name: 'ArrayList' };
+</script>
+<script setup lang="ts">
+import Cursors from './cursors.vue';
 import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
 import { isPhone, sleep, stepInterval } from '@/common/utils';
 
@@ -50,27 +44,6 @@ const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
 let actives = reactive<number[]>([]);
-
-const cursorItemStyle = computed(() => {
-  // let cursorsItemRef = cursors.map((index) => itemRefs.get(index));
-  // let listTop = itemRefs.get(0).getBoundingClientRect().top;
-  // let itemMargin = itemRefs.get(0);
-  cursors.map((index, i) => {
-    console.log(index, `${itemRefs.get(index).offsetTop}`);
-  });
-
-  return cursors.map((index, i) => {
-    let styles: any = {};
-    if (isPhone()) {
-      styles['top'] = `${itemRefs.get(index).offsetTop}px`;
-    } else {
-      console.log(itemRefs.get(index));
-
-      styles['left'] = `${itemRefs.get(index).offsetWidth * index}px`;
-    }
-    return styles;
-  });
-});
 
 const addActives = function (...items: any[]) {
   actives.push(...items);
@@ -200,10 +173,13 @@ useContext().expose({
 
 <style lang="scss" scoped>
 @import '@/styles/main.scss';
-
 .va-array-list {
   position: relative;
   display: flex;
+  justify-content: center;
+  @include phone {
+    // align-items: center;
+  }
 }
 
 .array-list {
@@ -238,30 +214,7 @@ useContext().expose({
     font-weight: 500;
   }
 }
-.cursors-list {
-  $breadth: 40px;
 
-  position: absolute;
-  width: 100%;
-  height: $breadth;
-  bottom: 0;
-  @include phone {
-    height: 100%;
-    width: $breadth;
-    right: 0;
-    bottom: auto;
-  }
-}
-.cursor-item {
-  position: absolute;
-  display: inline-block;
-  height: 0;
-  border: 10px solid;
-  border-color: transparent transparent blue transparent;
-  @include phone {
-    border-color: transparent blue transparent transparent;
-  }
-}
 .list-enter-active,
 .list-leave-active {
   transition: all 0.8s ease-in-out;
