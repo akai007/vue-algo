@@ -1,11 +1,11 @@
 
 
 @mixin phone {
-  @media (max-width: 600px) { @content; }
+  @media (max-width: 768px) { @content; }
 }
 
 @mixin respond($break_point) {
   @if $break_point == phone {
-    @media (max-width: 600px) { @content; }
+    @media (max-width: 768px) { @content; }
   }
 }

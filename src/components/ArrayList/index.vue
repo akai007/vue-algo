@@ -3,11 +3,11 @@
   <div class="va-array-list">
     <transition-group name="list" tag="div" class="array-list">
       <div
-        v-for="item in list"
+        v-for="(item, index) in list"
         :key="item"
         class="array-list-item"
         :class="[actives[0] == item ? 'is-active-first' : '', actives[1] == item ? 'is-active-second' : '']"
-        :ref="(el) => itemRefs.push(el)"
+        :ref="(el) => itemRefs.set(index, el)"
       >
         <div>{{ item }}</div>
       </div>
@@ -29,7 +29,7 @@
 <script lang="ts"></script>
 <script name="ArrayList" setup lang="ts">
 import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
-import { sleep, stepInterval } from '@/common/utils';
+import { isPhone, sleep, stepInterval } from '@/common/utils';
 
 const props = defineProps({
   modelValue: {
@@ -46,21 +46,29 @@ const props = defineProps({
 const emit = defineEmit();
 
 const list = reactive<number[]>(props.modelValue as number[]);
-const itemRefs: any[] = [];
+const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
 let actives = reactive<number[]>([]);
 
 const cursorItemStyle = computed(() => {
-  let cursorsItemRef = cursors.map(index => itemRefs[index]);
-  let listTop = itemRefs[0].getBoundingClientRect().top
-  let itemMargin = itemRefs[0];
-  console.log('margin',itemRefs[0].style);
-  
+  // let cursorsItemRef = cursors.map((index) => itemRefs.get(index));
+  // let listTop = itemRefs.get(0).getBoundingClientRect().top;
+  // let itemMargin = itemRefs.get(0);
+  cursors.map((index, i) => {
+    console.log(index, `${itemRefs.get(index).offsetTop}`);
+  });
+
   return cursors.map((index, i) => {
-    return {
-      top: `${((itemRefs[index].offsetHeight+2) * index) + listTop + ( 15 * i)}px`
+    let styles: any = {};
+    if (isPhone()) {
+      styles['top'] = `${itemRefs.get(index).offsetTop}px`;
+    } else {
+      console.log(itemRefs.get(index));
+
+      styles['left'] = `${itemRefs.get(index).offsetWidth * index}px`;
     }
+    return styles;
   });
 });
 
@@ -194,11 +202,13 @@ useContext().expose({
 @import '@/styles/main.scss';
 
 .va-array-list {
-  position: flex;
+  position: relative;
+  display: flex;
 }
 
 .array-list {
   height: 100px;
+  position: relative;
   display: flex;
   overflow-x: scroll;
   padding: 40px 0;
@@ -229,14 +239,28 @@ useContext().expose({
   }
 }
 .cursors-list {
-  // position: absolute;
+  $breadth: 40px;
+
+  position: absolute;
+  width: 100%;
+  height: $breadth;
+  bottom: 0;
+  @include phone {
+    height: 100%;
+    width: $breadth;
+    right: 0;
+    bottom: auto;
+  }
 }
 .cursor-item {
-  display: inline-block;
   position: absolute;
+  display: inline-block;
   height: 0;
   border: 10px solid;
-  border-color: transparent blue transparent transparent;
+  border-color: transparent transparent blue transparent;
+  @include phone {
+    border-color: transparent blue transparent transparent;
+  }
 }
 .list-enter-active,
 .list-leave-active {
