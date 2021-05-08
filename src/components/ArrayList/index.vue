@@ -44,6 +44,7 @@ const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
 let actives = reactive<number[]>([]);
+let sorted = reactive<number[]>([]);
 
 const addActives = function (...items: any[]) {
   actives.push(...items);
@@ -89,16 +90,18 @@ const swap = async (x: number, y: number) => {
 };
 
 const bubbleSort = async () => {
-  for (let i = 0; i < list.length; i++) {
+  let i, j;
+  for (i = 0; i < list.length; i++) {
     cursors[0] = i;
     await sleep(1);
-    for (let j = 0; j < list.length - i - 1; j++) {
+    for (j = 0; j < list.length - i - 1; j++) {
       cursors[1] = j;
       await sleep(1);
       if (list[j] > list[j + 1]) {
         await swap(j, j + 1);
       }
     }
+    sorted.push(j);
   }
 };
 
@@ -173,6 +176,10 @@ useContext().expose({
 
 <style lang="scss" scoped>
 @import '@/styles/main.scss';
+
+$moving_color: #e98b2a;
+$sorted_color: #86c166;
+
 .va-array-list {
   position: relative;
   display: flex;
@@ -192,16 +199,20 @@ useContext().expose({
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    padding: 0 40px;
+    padding: 0 60px;
   }
 }
 
 .array-list-item {
+  $size: 3.5rem;
+
   display: inline-block;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  text-align: center;
   margin: 1px;
+  border-radius: 100%;
   background-color: #58b2dc;
   transition: all 0.8s ease;
 }
@@ -210,7 +221,7 @@ useContext().expose({
   position: relative;
   div {
     color: #fff;
-    font-size: 24px;
+    font-size: 1.2rem;
     font-weight: 500;
   }
 }
@@ -227,14 +238,14 @@ useContext().expose({
 }
 
 .list-move.is-active-first {
-  background-color: #999;
+  background-color: $moving_color;
   transform: translateY(-30px);
   @include phone {
     transform: translateX(-30px);
   }
 }
 .list-move.is-active-second {
-  background-color: #999;
+  background-color: $moving_color;
   transform: translateY(30px);
   @include phone {
     transform: translateX(30px);
