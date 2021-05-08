@@ -7,7 +7,11 @@
           v-for="(item, index) in list"
           :key="item"
           class="array-list-item"
-          :class="[actives[0] == item ? 'is-active-first' : '', actives[1] == item ? 'is-active-second' : '']"
+          :class="[
+            actives[0] == item ? 'is-active-first' : '',
+            actives[1] == item ? 'is-active-second' : '',
+            sorted.includes(index) ? 'is-sorted' : '',
+          ]"
           :ref="(el) => itemRefs.set(index, el)"
         >
           <div>{{ item }}</div>
@@ -215,6 +219,10 @@ $sorted_color: #86c166;
   border-radius: 100%;
   background-color: #58b2dc;
   transition: all 0.8s ease;
+
+  &.is-sorted {
+    background-color: $sorted_color;
+  }
 }
 
 .array-list-item {
