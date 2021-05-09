@@ -1,5 +1,4 @@
 <template>
-  {{ actives }}
   <div class="va-array-list">
     <Cursors :modelValue="cursors" :itemRefs="itemRefs">
       <transition-group name="list" tag="div" class="array-list">
@@ -288,7 +287,7 @@ $sorted_color: #86c166;
 .array-list-item {
   $size: 3.5rem;
 
-  display: inline-block;
+  display: flex;
   width: $size;
   height: $size;
   line-height: $size;
