@@ -37,7 +37,7 @@ const props = defineProps({
 });
 const emit = defineEmit();
 
-const CURSOR_FLAGS = ['i', 'j', 'k'];
+const CURSOR_FLAGS = ['i', 'j', 'k', 'x', 'y', 'z'];
 
 const cursors = reactive<number[]>(props.modelValue as number[]);
 let actives = reactive<number[]>([]);
@@ -55,7 +55,7 @@ const cursorItemStyle = computed(() => {
       } else {
         points.add(point);
       }
-      styles['top'] = `${point}px`;
+      styles['transform'] = `translateY(${point}px)`;
     } else {
       point = (props.itemRefs as any).get(index).offsetLeft;
       if (points.has(point)) {
@@ -63,7 +63,7 @@ const cursorItemStyle = computed(() => {
       } else {
         points.add(point);
       }
-      styles['left'] = `${point}px`;
+      styles['transform'] = `translateX(${point}px)`;
     }
     return styles;
   });
