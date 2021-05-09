@@ -8,8 +8,8 @@
           :key="item"
           class="array-list-item"
           :class="[
-            actives[0] == item ? 'is-active-first' : '',
-            actives[1] == item ? 'is-active-second' : '',
+            actives.first.includes(item) ? 'is-active-first' : '',
+            actives.second.includes(item) ? 'is-active-second' : '',
             sorted.includes(index) ? 'is-sorted' : '',
           ]"
           :ref="(el) => itemRefs.set(index, el)"
@@ -47,11 +47,15 @@ const list = reactive<number[]>(props.modelValue as number[]);
 const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
-let actives = reactive<number[]>([]);
+let actives = reactive<{first: [], second: []}>({first: [], second: []});
 let sorted = reactive<number[]>([]);
 
-const addActives = function (...items: any[]) {
-  actives.push(...items);
+const addActives = function (first?: number[], second?: number[]) {
+  //@ts-ignore
+  first?.forEach(item => actives.first.push(item))
+  //@ts-ignore
+  second?.forEach(item => actives.second.push(item))
+
   setTimeout(() => {
     // TODO ready to optimize
     clearActives();
@@ -59,7 +63,8 @@ const addActives = function (...items: any[]) {
 };
 
 const clearActives = function () {
-  actives.length = 0;
+  actives.first.length = 0;
+  actives.second.length = 0;
 };
 
 const insert = stepInterval((data: number) => {
@@ -81,13 +86,13 @@ const pop = stepInterval(() => {
 
 const update = async (index: number, x: number) => {
   await sleep();
-  addActives(list[index]);
+  addActives([list[index]]);
   list[index] = x;
 };
 
 const swap = async (x: number, y: number) => {
   await sleep();
-  addActives(list[x], list[y]);
+  addActives([list[x]], [list[y]]);
   let t = list[x];
   list[x] = list[y];
   list[y] = t;
@@ -97,7 +102,7 @@ const bubbleSort = async () => {
   let i, j;
   for (i = 0; i < list.length; i++) {
     cursors[0] = i;
-    await sleep(1);
+    await sleep();
     for (j = 0; j < list.length - i - 1; j++) {
       cursors[1] = j;
       await sleep(1);
@@ -105,6 +110,7 @@ const bubbleSort = async () => {
         await swap(j, j + 1);
       }
     }
+    await sleep();
     sorted.push(j);
   }
 };
@@ -166,7 +172,78 @@ const quickSort = async function quickSort(l: number = 0, h: number = list.lengt
   }
 };
 
-const mergeSort = async function mergeSort() {};
+async function merge(l:number, mid:number, h:number) {
+  let i, j, k;
+  i = l;
+  j = mid;
+  k = 0;
+  let firstActives = [];
+  let secondActives = [];
+
+  let mergeList = [];
+  while (i<mid && j<=h) {
+    await sleep();
+    cursors[0] = i;
+    cursors[1] = j;
+    if(list[i] < list[j]) {
+      firstActives.push(list[i]);
+      mergeList[k] = list[i];
+      k++, i++;
+    } else {
+      secondActives.push(list[j]);
+      mergeList[k] = list[j];
+      k++, j++;
+    }
+  }
+
+  while (i<mid) {
+    firstActives.push(list[i]);
+    mergeList[k] = list[i];
+    k++, i++;
+  }
+  while (j<=h) {
+    secondActives.push(list[j]);
+    mergeList[k] = list[j];
+    k++, j++;
+  }
+
+  await sleep();
+  addActives(firstActives, secondActives);
+  for (let i = h; i >= l; i--) {
+    list[i] = mergeList[k-1];
+    k--;
+  }
+  
+}
+
+
+const mergeSort = async function mergeSort() {
+  let p,i,n,l,mid,h;
+  n = list.length;
+
+  for (p = 2; p <= n; p=p*2) {
+    for (i = 0; i+p-1 < n; i = i+p) {
+      l = i;
+      h = i + p - 1;
+      mid = Math.round( (l + h) / 2 );
+      await merge(l, mid, h);
+    }
+
+    if (n-i > p/2) {
+      l = i;
+      h = i + p - 1;
+      mid = Math.round( (l + h) / 2 );
+      console.log(l, mid, n-1);
+      
+      await merge(l, mid, n-1);
+    }
+  }
+  if (p/2 < n) {
+    await merge(0, Math.round(p/2), n-1);
+  }
+  await sleep();
+  list.forEach((item,index) => sorted.push(index));
+};
 
 useContext().expose({
   insert,
@@ -175,6 +252,7 @@ useContext().expose({
   insertionSort,
   selectionSort,
   quickSort,
+  mergeSort,
 });
 </script>
 
@@ -197,7 +275,7 @@ $sorted_color: #86c166;
   height: 100px;
   position: relative;
   display: flex;
-  overflow-x: scroll;
+  overflow-x: hidden;
   padding: 40px 0;
   @include phone {
     flex-direction: column;

@@ -18,8 +18,8 @@ onMounted(async () => {
   // arrayListRef.pop();
 
   // arrayListRef.quickSort();
-  console.log(arrayListRef.bubbleSort);
-  await arrayListRef.bubbleSort();
+  // console.log(arrayListRef.bubbleSort);
+  await arrayListRef.mergeSort();
   console.log('done');
 
   // await arrayListRef.quickSort();
