@@ -1,0 +1,7 @@
+{
+  "ArrayList": {
+    "attributes": ["action-delay"],
+    "subtags": ["test"],
+    "description": "A Array List"
+  }
+}

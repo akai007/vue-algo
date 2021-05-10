@@ -1,12 +1,13 @@
 <template>
   <ArrayList ref="arrayList" v-model="array"></ArrayList>
+  <ArrayList action> </ArrayList>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from '@vue/runtime-core';
 import { ArrayList } from '@/components';
-
-const arrayList = ref<ArrayList>({});
+import { IArrayList } from '@/components/ArrayList/index';
+const arrayList = ref<IArrayList>({});
 
 let array = reactive([11, 13, 7, 12, 16, 9, 24, 5, 10, 3]);
 

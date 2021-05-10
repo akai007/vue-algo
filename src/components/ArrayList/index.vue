@@ -24,10 +24,10 @@
 export default { name: 'ArrayList' };
 </script>
 <script setup lang="ts">
+// @ts-ignore
 import Cursors from './cursors.vue';
 import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
 import { isPhone, sleep, stepInterval } from '@/common/utils';
-
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -40,7 +40,7 @@ const props = defineProps({
     default: 1,
   },
 });
-const emit = defineEmit();
+const emit = defineEmit(['insert']);
 
 const list = reactive<number[]>(props.modelValue as number[]);
 const itemRefs = new Map<number, HTMLDivElement | any>();
@@ -50,9 +50,7 @@ let actives = reactive<{ first: number[]; second: number[] }>({ first: [], secon
 let sorted = reactive<number[]>([]);
 
 const addActives = function (first?: number[], second?: number[]) {
-  //@ts-ignore
   first?.forEach((item) => actives.first.push(item));
-  //@ts-ignore
   second?.forEach((item) => actives.second.push(item));
 
   setTimeout(() => {
