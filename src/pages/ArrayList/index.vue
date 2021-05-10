@@ -4,10 +4,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from '@vue/runtime-core';
 import { ArrayList } from '@/components';
+import { onMounted, reactive, ref } from '@vue/runtime-core';
 import { IArrayList } from '@/components/ArrayList/index';
-const arrayList = ref<IArrayList>({});
+const arrayList = ref<IArrayList | null>(null);
 
 let array = reactive([11, 13, 7, 12, 16, 9, 24, 5, 10, 3]);
 
@@ -19,8 +19,7 @@ onMounted(async () => {
   // arrayListRef.pop();
 
   // arrayListRef.quickSort();
-  // console.log(arrayListRef.bubbleSort);
-  await arrayListRef.mergeSort();
+  await arrayListRef?.mergeSort();
   console.log('done');
 
   // await arrayListRef.quickSort();

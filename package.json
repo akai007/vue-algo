@@ -25,8 +25,8 @@
     "vite": "^2.2.4",
     "vue-tsc": "^0.0.24"
   },
-	"vetur": {
-		"tags": "./src/components/_helper/tags.json",
-		"attributes": "./src/components/_helper/attributes.json"
-	}
+  "vetur": {
+    "tags": "./src/components/_helper/tags.json",
+    "attributes": "./src/components/_helper/attributes.json"
+  }
 }
