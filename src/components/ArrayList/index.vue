@@ -46,14 +46,14 @@ const list = reactive<number[]>(props.modelValue as number[]);
 const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
-let actives = reactive<{first: [], second: []}>({first: [], second: []});
+let actives = reactive<{ first: number[]; second: number[] }>({ first: [], second: [] });
 let sorted = reactive<number[]>([]);
 
 const addActives = function (first?: number[], second?: number[]) {
   //@ts-ignore
-  first?.forEach(item => actives.first.push(item))
+  first?.forEach((item) => actives.first.push(item));
   //@ts-ignore
-  second?.forEach(item => actives.second.push(item))
+  second?.forEach((item) => actives.second.push(item));
 
   setTimeout(() => {
     // TODO ready to optimize
@@ -171,7 +171,7 @@ const quickSort = async function quickSort(l: number = 0, h: number = list.lengt
   }
 };
 
-async function merge(l:number, mid:number, h:number) {
+async function merge(l: number, mid: number, h: number) {
   let i, j, k;
   i = l;
   j = mid;
@@ -180,11 +180,11 @@ async function merge(l:number, mid:number, h:number) {
   let secondActives = [];
 
   let mergeList = [];
-  while (i<mid && j<=h) {
+  while (i < mid && j <= h) {
     await sleep();
     cursors[0] = i;
     cursors[1] = j;
-    if(list[i] < list[j]) {
+    if (list[i] < list[j]) {
       firstActives.push(list[i]);
       mergeList[k] = list[i];
       k++, i++;
@@ -195,12 +195,12 @@ async function merge(l:number, mid:number, h:number) {
     }
   }
 
-  while (i<mid) {
+  while (i < mid) {
     firstActives.push(list[i]);
     mergeList[k] = list[i];
     k++, i++;
   }
-  while (j<=h) {
+  while (j <= h) {
     secondActives.push(list[j]);
     mergeList[k] = list[j];
     k++, j++;
@@ -209,39 +209,37 @@ async function merge(l:number, mid:number, h:number) {
   await sleep();
   addActives(firstActives, secondActives);
   for (let i = h; i >= l; i--) {
-    list[i] = mergeList[k-1];
+    list[i] = mergeList[k - 1];
     k--;
   }
-  
 }
 
-
 const mergeSort = async function mergeSort() {
-  let p,i,n,l,mid,h;
+  let p, i, n, l, mid, h;
   n = list.length;
 
-  for (p = 2; p <= n; p=p*2) {
-    for (i = 0; i+p-1 < n; i = i+p) {
+  for (p = 2; p <= n; p = p * 2) {
+    for (i = 0; i + p - 1 < n; i = i + p) {
       l = i;
       h = i + p - 1;
-      mid = Math.round( (l + h) / 2 );
+      mid = Math.round((l + h) / 2);
       await merge(l, mid, h);
     }
 
-    if (n-i > p/2) {
+    if (n - i > p / 2) {
       l = i;
       h = i + p - 1;
-      mid = Math.round( (l + h) / 2 );
-      console.log(l, mid, n-1);
-      
-      await merge(l, mid, n-1);
+      mid = Math.round((l + h) / 2);
+      console.log(l, mid, n - 1);
+
+      await merge(l, mid, n - 1);
     }
   }
-  if (p/2 < n) {
-    await merge(0, Math.round(p/2), n-1);
+  if (p / 2 < n) {
+    await merge(0, Math.round(p / 2), n - 1);
   }
   await sleep();
-  list.forEach((item,index) => sorted.push(index));
+  list.forEach((item, index) => sorted.push(index));
 };
 
 useContext().expose({
