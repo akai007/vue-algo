@@ -113,16 +113,28 @@ const bubbleSort = async () => {
 };
 
 const insertionSort = async () => {
-  for (let i = 1; i < list.length; i++) {
-    let j = i - 1;
-    let x = list[i];
+  let i, j, x;
+  sorted.push(0);
+  for (i = 1; i < list.length; i++) {
+    j = i - 1;
+    x = list[i];
+    [cursors[0], cursors[1]] = [i, j];
     await sleep();
+    // animation only
     while (j > -1 && list[j] > x) {
+      [cursors[0], cursors[1]] = [i, j];
       await sleep();
+      j--;
+    }
+
+    j = i - 1;
+    while (j > -1 && list[j] > x) {
       list[j + 1] = list[j];
       j--;
     }
+
     list[j + 1] = x;
+    sorted.push(i);
   }
 };
 
@@ -130,6 +142,7 @@ const selectionSort = async () => {
   let i, j, k, t;
   for (i = 0; i < list.length; i++) {
     for (j = k = i; j < list.length; j++) {
+      cursors[0] = i;
       if (list[j] < list[k]) {
         k = j;
       }
@@ -228,8 +241,6 @@ const mergeSort = async function mergeSort() {
       l = i;
       h = i + p - 1;
       mid = Math.round((l + h) / 2);
-      console.log(l, mid, n - 1);
-
       await merge(l, mid, n - 1);
     }
   }
