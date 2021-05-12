@@ -18,7 +18,7 @@ onMounted(async () => {
   // arrayListRef.pop();
 
   // arrayListRef.quickSort();
-  await arrayListRef?.insertionSort();
+  await arrayListRef?.selectionSort();
   console.log('done');
 
   // await arrayListRef.quickSort();
@@ -29,4 +29,4 @@ onMounted(async () => {
 });
 </script>
 
-<style></style>
+<style lang="scss"></style>

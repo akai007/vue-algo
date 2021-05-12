@@ -272,6 +272,7 @@ $sorted_color: #86c166;
   position: relative;
   display: flex;
   justify-content: center;
+  user-select: none;
   @include phone {
     // align-items: center;
   }

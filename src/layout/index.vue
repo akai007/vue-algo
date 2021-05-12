@@ -1,8 +1,12 @@
 <template>
-  <div>{{ $route.meta.title }}</div>
+  <div class="layout__title">{{ $route.meta.title }}</div>
   <router-view></router-view>
 </template>
 
 <script setup lang="ts"></script>
 
-<style></style>
+<style lang="scss">
+.layout__title {
+  font-size: 1.6rem;
+}
+</style>
