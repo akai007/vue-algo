@@ -295,10 +295,11 @@ $sorted_color: #86c166;
   $size: 3.5rem;
 
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: $size;
   height: $size;
   line-height: $size;
-  text-align: center;
   margin: 1px;
   border-radius: 100%;
   background-color: #58b2dc;

@@ -29,43 +29,4 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-.array-list {
-  height: 100px;
-  display: flex;
-  overflow-x: scroll;
-}
-
-.array-list-item {
-  width: 60px;
-
-  height: 60px;
-  line-height: 60px;
-  margin: 1px;
-  background-color: #58b2dc;
-  vertical-align: middle;
-}
-
-.array-list-item div {
-  width: 60px;
-}
-
-.array-list2 {
-  height: 100px;
-  display: flex;
-  overflow-x: scroll;
-}
-
-.array-list-item2 {
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  margin: 1px;
-  background-color: #58b2dc;
-  vertical-align: middle;
-
-  color: #fff;
-  font-weight: 500;
-  font-size: 26px;
-}
-</style>
+<style></style>
