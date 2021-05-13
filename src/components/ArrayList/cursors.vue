@@ -43,26 +43,26 @@ const cursors = reactive<number[]>(props.modelValue as number[]);
 let actives = reactive<number[]>([]);
 
 const cursorItemStyle = computed(() => {
-  let points = new Set();
+  let points = new Map();
 
   return cursors.map((index, i) => {
     let styles: any = {};
-    let point;
+
+    const OFFSET_DIS = 12;
+    let point, offsetCount;
+    offsetCount = 0;
+
+    points.set(i, index);
+    for (const _index of points.keys()) {
+      if (index != _index) offsetCount++;
+    }
+
+    const itemRef = (props.itemRefs as any).get(index);
     if (isPhone()) {
-      point = (props.itemRefs as any).get(index).offsetTop;
-      if (points.has(point)) {
-        point = point + 20;
-      } else {
-        points.add(point);
-      }
+      point = itemRef.offsetTop + offsetCount * OFFSET_DIS;
       styles['transform'] = `translateY(${point}px)`;
     } else {
-      point = (props.itemRefs as any).get(index).offsetLeft;
-      if (points.has(point)) {
-        point = point + 20;
-      } else {
-        points.add(point);
-      }
+      point = itemRef.offsetLeft + offsetCount * OFFSET_DIS;
       styles['transform'] = `translateX(${point}px)`;
     }
     return styles;
@@ -75,7 +75,7 @@ useContext().expose({});
 <style lang="scss" scoped>
 @import '@/styles/main.scss';
 
-$cursor_colors: #e16b8c, #fb966e;
+$cursor_colors: #cb1b45, #e16b8c, #fb966e, #fedfe1;
 .cursors-box {
   position: relative;
 }
