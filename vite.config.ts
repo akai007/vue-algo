@@ -9,6 +9,9 @@ export default defineConfig({
       { find: '@', replacement: '/src' }
     ]
   },
+	server: {
+		host: '0.0.0.0'
+	},
 // TODO
   // css: {
   //   preprocessorOptions: {
