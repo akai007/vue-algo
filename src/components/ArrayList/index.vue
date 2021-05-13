@@ -142,12 +142,15 @@ const selectionSort = async () => {
   let i, j, k, t;
   for (i = 0; i < list.length; i++) {
     for (j = k = i; j < list.length; j++) {
-      cursors[0] = i;
+      await sleep();
       if (list[j] < list[k]) {
         k = j;
       }
+      [cursors[0], cursors[1], cursors[2]] = [i, j, k];
     }
     await swap(i, k);
+    await sleep();
+    sorted.push(i);
   }
 };
 
@@ -193,8 +196,7 @@ async function merge(l: number, mid: number, h: number) {
   let mergeList = [];
   while (i < mid && j <= h) {
     await sleep();
-    cursors[0] = i;
-    cursors[1] = j;
+    [cursors[0], cursors[1]] = [i, j];
     if (list[i] < list[j]) {
       firstActives.push(list[i]);
       mergeList[k] = list[i];
