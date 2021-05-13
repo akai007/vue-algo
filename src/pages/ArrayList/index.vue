@@ -23,9 +23,7 @@ onMounted(async () => {
 
   // await arrayListRef.quickSort();
   // console.log('done');
-  useContext().expose({
-    ArrayList,
-  });
+  ArrayList;
 });
 </script>
 
