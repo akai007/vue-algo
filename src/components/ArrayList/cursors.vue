@@ -54,7 +54,7 @@ const cursorItemStyle = computed(() => {
 
     points.set(i, index);
     for (const _index of points.keys()) {
-      if (index != _index) offsetCount++;
+      if (i != _index) offsetCount++;
     }
 
     const itemRef = (props.itemRefs as any).get(index);
