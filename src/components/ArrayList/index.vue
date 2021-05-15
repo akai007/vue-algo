@@ -158,16 +158,23 @@ async function partition(l: number, h: number) {
   let i = l;
   let j = h;
   let pirot = list[l];
-
+  cursors[2] = l;
+  // TODO cursors len + 1 position
+  await sleep();
   let t;
   do {
     do {
+      await sleep();
+      cursors[0] = i;
       i++;
     } while (list[i] <= pirot);
     do {
+      await sleep();
+      cursors[1] = j;
       j--;
     } while (list[j] > pirot);
     if (i < j) {
+      await sleep();
       await swap(i, j);
     }
   } while (i < j);
@@ -182,6 +189,12 @@ const quickSort = async function quickSort(l: number = 0, h: number = list.lengt
     j = await partition(l, h);
     await quickSort(l, j);
     await quickSort(j + 1, h);
+  }
+  for (let i = l; i < h; i++) {
+    // TODO fix soted bug
+    if (!sorted.includes(i)) {
+      sorted.push(i);
+    }
   }
 };
 
