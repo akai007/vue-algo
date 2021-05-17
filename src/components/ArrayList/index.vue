@@ -183,7 +183,7 @@ async function partition(l: number, h: number) {
   return j;
 }
 
-const quickSort = async function quickSort(l: number = 0, h: number = list.length) {
+const quickSort = async function quickSort(l = 0, h = list.length) {
   let j;
   if (l < h) {
     j = await partition(l, h);
