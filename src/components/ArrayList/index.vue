@@ -42,7 +42,7 @@ const props = defineProps({
 });
 const emit = defineEmit(['insert']);
 
-const list = reactive<number[]>(props.modelValue as number[]);
+let list = reactive<number[]>(props.modelValue as number[]);
 const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
@@ -266,6 +266,22 @@ const mergeSort = async function mergeSort() {
   list.forEach((item, index) => sorted.push(index));
 };
 
+const radixSort = async () => {
+  const maxDigit = Math.max(...list).toString().length;
+  let radixArr: Array<number>[] = [];
+  for (let i = 0; i < maxDigit; i++) {
+    for (let j = 0; j < list.length; j++) {
+      let radixPosition = Number((list[j] / (1 * (10 ^ i))).toFixed()) % 10;
+      if (!radixArr[radixPosition]) radixArr[radixPosition] = [];
+      radixArr[radixPosition].push(list[j]);
+    } // TODO fix
+
+    list = Object.assign([], radixArr.toString().split(','));
+
+    radixArr = [];
+  }
+};
+
 useContext().expose({
   insert,
   pop,
@@ -274,6 +290,7 @@ useContext().expose({
   selectionSort,
   quickSort,
   mergeSort,
+  radixSort,
 });
 </script>
 

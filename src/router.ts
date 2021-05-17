@@ -1,9 +1,16 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+
+type PagesRoute = RouteRecordRaw & {
+  meta?: {
+    title: String,
+  }
+}
 
 import Index from '@/pages/ArrayList/index.vue';
 
-const routes = [
-  { name:'index', path: '/', component: Index, meta: {title: 'ArrayList'} },
+const routes: PagesRoute[] = [
+  { name:'index', path: '/', redirect: '/arrayList' },
+  { name:'ArrayList', path: '/arrayList', component: Index, meta: {title: 'ArrayList'} },
 ]
 
 const router = createRouter({

@@ -10,4 +10,5 @@ export class IArrayList {
 	selectionSort: Function 
 	quickSort: Function;
 	mergeSort: Function;
+	radixSort: Function;
 }

@@ -31,6 +31,7 @@ onMounted(async () => {
 
   // arrayListRef.quickSort();
   // await arrayListRef?.quickSort();
+  arrayListRef?.radixSort();
   console.log('done');
 
   // await arrayListRef.quickSort();
