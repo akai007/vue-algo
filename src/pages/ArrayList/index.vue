@@ -14,7 +14,8 @@ import { onMounted, reactive, ref, useContext } from '@vue/runtime-core';
 import { IArrayList } from '@/components/ArrayList/index.d';
 const arrayList = ref<IArrayList | undefined>(undefined);
 
-const initValue = [11, 13, 7, 12, 16, 9, 24, 5, 10, 3];
+// const initValue = [11, 13, 7, 12, 16, 9, 24, 5, 10, 3];
+const initValue = [237, 146, 259, 348, 152, 163, 235, 48, 36, 62];
 
 let array = reactive([...initValue]);
 
@@ -25,17 +26,9 @@ const reset = function () {
 onMounted(async () => {
   const arrayListRef = arrayList.value;
 
-  // arrayListRef.insert(2);
-  // arrayListRef.insert(1);
-  // arrayListRef.pop();
-
-  // arrayListRef.quickSort();
-  // await arrayListRef?.quickSort();
   arrayListRef?.radixSort();
   console.log('done');
 
-  // await arrayListRef.quickSort();
-  // console.log('done');
   ArrayList;
 });
 </script>

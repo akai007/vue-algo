@@ -271,12 +271,23 @@ const radixSort = async () => {
   let radixArr: Array<number>[] = [];
   for (let i = 0; i < maxDigit; i++) {
     for (let j = 0; j < list.length; j++) {
-      let radixPosition = Number((list[j] / (1 * (10 ^ i))).toFixed()) % 10;
+      let radixPosition = Math.floor(list[j] / (1 * Math.pow(10, i))) % 10;
+      console.log(radixPosition, list[j]);
+
       if (!radixArr[radixPosition]) radixArr[radixPosition] = [];
       radixArr[radixPosition].push(list[j]);
-    } // TODO fix
+    }
+    console.log(radixArr);
 
-    list = Object.assign([], radixArr.toString().split(','));
+    radixArr
+      .toString()
+      .split(',')
+      .filter((item) => item)
+      .forEach((item, index) => {
+        list[index] = Number(item);
+      });
+
+    console.log(list);
 
     radixArr = [];
   }
