@@ -1,4 +1,4 @@
-export class IArrayList {
+export interface IArrayList {
 	insert: Function;
 	remove: Function;
 	push: Function;
