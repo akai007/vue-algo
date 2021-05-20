@@ -1,5 +1,6 @@
 <template>
   <ArrayList ref="arrayList" v-model="array"></ArrayList>
+
   <button class="array-list__action" @click="reset()">reset</button>
   <button class="array-list__action" @click="arrayList.insertionSort()">insertion<br />sort</button>
   <button class="array-list__action" @click="arrayList.selectionSort()">selection<br />sort</button>
