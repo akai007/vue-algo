@@ -11,21 +11,27 @@
 
 <script setup lang="ts">
 import { ArrayList } from '@/components';
-import { onMounted, reactive, ref, useContext } from '@vue/runtime-core';
+import { onMounted, ref } from '@vue/runtime-core';
 import type { IArrayList } from '@/components/ArrayList/index.d';
+import { SortStatusEnum } from '@/components/ArrayList/index.d';
 const arrayList = ref<IArrayList>({} as IArrayList);
 
-// const initValue = [11, 13, 7, 12, 16, 9, 24, 5, 10, 3];
-const initValue = [237, 146, 259, 348, 152, 163, 235, 48, 36, 62];
+const initValue = [11, 13, 7, 12, 16, 9, 24, 5, 10, 3];
+// const initValue = [237, 146, 259, 348, 152, 163, 235, 48, 36, 62];
 
-let array = reactive([...initValue]);
+let array = ref([...initValue]);
 
 const reset = function () {
-  array = [...initValue];
+  console.log('reset');
+  array.value = [...initValue];
 };
 
 onMounted(async () => {
   const arrayListRef = arrayList.value;
+
+  for (const item in arrayListRef) {
+    console.log(item);
+  }
 
   arrayListRef.radixSort();
   console.log('done');

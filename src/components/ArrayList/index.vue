@@ -26,11 +26,12 @@ export default { name: 'ArrayList' };
 <script setup lang="ts">
 // @ts-ignore
 import Cursors from './cursors.vue';
-import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
+import { defineEmit, defineProps, reactive, useContext, watchEffect } from '@vue/runtime-core';
+import type { PropType } from '@vue/runtime-core';
 import { isPhone, sleep, stepInterval } from '@/common/utils';
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: Array as PropType<number[]>,
     default() {
       return [];
     },
@@ -63,6 +64,21 @@ const clearActives = function () {
   actives.first.length = 0;
   actives.second.length = 0;
 };
+
+const reset = function (value: number[]) {
+  list.length = props.modelValue.length;
+  props.modelValue.forEach((item, index) => {
+    list[index] = item;
+  });
+  clearActives();
+  sorted.length = 0;
+  cursors.length = 0;
+};
+watchEffect(() => {
+  console.log('props.modelValue change', props.modelValue);
+  // TODO is done
+  reset(props.modelValue);
+});
 
 const insert = stepInterval((data: number) => {
   list.push(data);
@@ -341,7 +357,7 @@ $sorted_color: #86c166;
   height: $size;
   line-height: $size;
   margin: 1px;
-  border-radius: 100%;
+  // border-radius: 100%;
   background-color: #58b2dc;
   transition: all 0.8s ease;
 
