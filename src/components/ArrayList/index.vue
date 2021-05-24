@@ -24,7 +24,6 @@
 export default { name: 'ArrayList' };
 </script>
 <script setup lang="ts">
-// @ts-ignore
 import Cursors from './cursors.vue';
 import { defineEmit, defineProps, reactive, useContext, watchEffect } from '@vue/runtime-core';
 import type { PropType } from '@vue/runtime-core';
