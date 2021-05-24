@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+export type ArrayNode = number;
+
 export interface IArrayList {
   insert: Function;
   remove: Function;

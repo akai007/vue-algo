@@ -29,9 +29,10 @@ import Cursors from './cursors.vue';
 import { defineEmit, defineProps, reactive, useContext, watchEffect } from '@vue/runtime-core';
 import type { PropType } from '@vue/runtime-core';
 import { isPhone, sleep, stepInterval } from '@/common/utils';
+import type { ArrayNode } from '.';
 const props = defineProps({
   modelValue: {
-    type: Array as PropType<number[]>,
+    type: Array as PropType<ArrayNode[]>,
     default() {
       return [];
     },
@@ -43,7 +44,7 @@ const props = defineProps({
 });
 const emit = defineEmit(['insert']);
 
-let list = reactive<number[]>(props.modelValue as number[]);
+let list = reactive<ArrayNode[]>(props.modelValue as ArrayNode[]);
 const itemRefs = new Map<number, HTMLDivElement | any>();
 
 let cursors = reactive<number[]>([]);
@@ -74,22 +75,23 @@ const reset = function (value: number[]) {
   sorted.length = 0;
   cursors.length = 0;
 };
-watchEffect(() => {
-  console.log('props.modelValue change', props.modelValue);
-  // TODO is done
-  reset(props.modelValue);
-});
+// TODO fix ref changed
+// watchEffect(() => {
+//   console.log('props.modelValue change', props.modelValue);
+//   // TODO is done
+//   reset(props.modelValue);
+// });
 
-const insert = stepInterval((data: number) => {
+const insert = stepInterval((data: ArrayNode) => {
   list.push(data);
   emit('insert', data);
 }, props.actionDelay);
 
-const remove = stepInterval((data: number) => {
+const remove = stepInterval((data: ArrayNode) => {
   list.push(data);
 }, props.actionDelay);
 
-const push = stepInterval((data: number) => {
+const push = stepInterval((data: ArrayNode) => {
   list.push(data);
 }, props.actionDelay);
 
@@ -97,10 +99,10 @@ const pop = stepInterval(() => {
   list.pop();
 }, props.actionDelay);
 
-const update = async (index: number, x: number) => {
+const update = async (index: number, node: ArrayNode) => {
   await sleep();
   addActives([list[index]]);
-  list[index] = x;
+  list[index] = node;
 };
 
 const swap = async (x: number, y: number) => {
@@ -284,7 +286,7 @@ const mergeSort = async function mergeSort() {
 
 const radixSort = async () => {
   const maxDigit = Math.max(...list).toString().length;
-  let radixArr: Array<number>[] = [];
+  let radixArr: Array<ArrayNode>[] = [];
   for (let i = 0; i < maxDigit; i++) {
     for (let j = 0; j < list.length; j++) {
       let radixPosition = Math.floor(list[j] / (1 * Math.pow(10, i))) % 10;

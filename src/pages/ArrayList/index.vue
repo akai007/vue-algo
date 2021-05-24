@@ -33,7 +33,7 @@ onMounted(async () => {
     console.log(item);
   }
 
-  arrayListRef.radixSort();
+  // arrayListRef.radixSort();
   console.log('done');
 
   ArrayList;
