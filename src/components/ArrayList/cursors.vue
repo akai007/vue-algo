@@ -16,7 +16,9 @@
   </div>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+export default { name: 'ArrayListCursor' };
+</script>
 <script name="ArrayList" setup lang="ts">
 import { computed, defineEmit, defineProps, reactive, ref, useContext } from '@vue/runtime-core';
 import { isPhone } from '@/common/utils';
